@@ -1,2 +1,2 @@
 # mavis
-Mobility, Automotive and Vehicle Information Service
+Mobility, Automotive and Vehicular Information Service
