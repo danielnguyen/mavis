@@ -1,0 +1,23 @@
+{
+  "name": "mavis",
+  "version": "1.0.0",
+  "description": "Mobility, Automotive and Vehicle Information Service",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielnguyen/mavis.git"
+  },
+  "author": "Daniel Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielnguyen/mavis/issues"
+  },
+  "homepage": "https://github.com/danielnguyen/mavis#readme",
+  "dependencies": {
+    "botkit": "^0.6.4"
+  }
+}
