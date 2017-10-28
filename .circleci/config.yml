@@ -17,25 +17,25 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+      # - restore_cache:
+      #     keys:
+      #     - v1-dependencies-{{ checksum "package.json" }}
+      #     # fallback to using the latest cache if no exact match is found
+      #     - v1-dependencies-
 
       - run: npm install
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      # - save_cache:
+      #     paths:
+      #       - node_modules
+      #     key: v1-dependencies-{{ checksum "package.json" }}
         
   test:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+      # - restore_cache:
+      #     key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: test
           command: npm run test
@@ -46,8 +46,8 @@ jobs:
       - image: coxauto/aws-ebcli
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+      # - restore_cache:
+      #     key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: ./.circleci/generate_configuration.sh
       - run: eb use $APPLICATION_ENVIRONMENT
       - run: eb deploy --timeout 45
