@@ -50,7 +50,7 @@ jobs:
       #     key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: 
           name: setup EB CLI
-          command: bash ./setup-eb.sh
+          command: bash ../scripts/setup-eb.sh
       - run: 
           name: deploy app to EB
           command: eb deploy --timeout 45
