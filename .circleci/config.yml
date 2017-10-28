@@ -48,8 +48,8 @@ jobs:
       - checkout
       # - restore_cache:
       #     key: dependency-cache-{{ checksum "yarn.lock" }}
-      - run: ./.circleci/generate_configuration.sh
-      - run: eb use $APPLICATION_ENVIRONMENT
+      - commands:
+      - run: bash ../scripts/setup-eb.sh
       - run: eb deploy --timeout 45
 
 workflows:
@@ -57,9 +57,9 @@ workflows:
   build-test-deploy:
     jobs:
       - build
-      - test:
-          requires:
-            - build
+      # - test:
+      #     requires:
+      #       - build
       # - hold:
       #     type: approval
       #     requires:
