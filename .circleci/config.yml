@@ -49,6 +49,9 @@ jobs:
       # - restore_cache:
       #     key: dependency-cache-{{ checksum "yarn.lock" }}
       - run: 
+          name: EB use
+          command: eb use master
+      - run: 
           name: deploy app to EB
           command: eb deploy --profile default --timeout 45
 
