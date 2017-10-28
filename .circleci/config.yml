@@ -48,9 +48,12 @@ jobs:
       - checkout
       # - restore_cache:
       #     key: dependency-cache-{{ checksum "yarn.lock" }}
-      - commands:
-        - run: bash ../scripts/setup-eb.sh
-        - run: eb deploy --timeout 45
+      - run: 
+          name: setup EB CLI
+          command: bash ../scripts/setup-eb.sh
+      - run: 
+          name: deploy app to EB
+          command: eb deploy --timeout 45
 
 workflows:
   version: 2
