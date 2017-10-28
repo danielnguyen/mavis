@@ -3,19 +3,16 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: node:8-alpine
+
+
 jobs:
   build:
-    docker:
-      # specify the version you desire here
-      - image: node:8-alpine
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
       - checkout
 
@@ -33,7 +30,26 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      - run: npm run test
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: test
+          command: npm run test
+
+  deploy:
+    working_directory: ~/app
+    docker:
+      - image: coxauto/aws-ebcli
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run: ./.circleci/generate_configuration.sh
+      - run: eb use $APPLICATION_ENVIRONMENT
+      - run: eb deploy --timeout 45
 
 
