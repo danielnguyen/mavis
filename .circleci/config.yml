@@ -57,15 +57,15 @@ workflows:
   build-test-deploy:
     jobs:
       - build
-      # - test:
-      #     requires:
-      #       - build
+      - test:
+          requires:
+            - build
       # - hold:
       #     type: approval
       #     requires:
       #       - test
       #       - lint
-      # - deploy:
-      #     requires:
-      #       - hold
-      - deploy
+      - deploy:
+          requires:
+            - build
+            # - hold
