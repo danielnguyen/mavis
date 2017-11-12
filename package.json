@@ -37,5 +37,12 @@
   "engineStrict": true,
   "engines": {
     "node": ">= 8.9.0"
+  },
+  "dependencies": {
+    "@types/morgan": "^1.7.35",
+    "botkit": "^0.6.6",
+    "fs": "0.0.1-security",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7"
   }
 }
