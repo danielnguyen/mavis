@@ -1,2 +1,3 @@
-# mavis
-Mobility, Automotive and Vehicular Information Service
+# MAVIS
+
+My Awesome Virtual Intelligence System

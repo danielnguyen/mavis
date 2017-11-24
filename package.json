@@ -2,14 +2,14 @@
   "name": "mavis",
   "version": "1.0.0",
   "description": "Mobility, Automotive and Vehicle Information Servic",
-  "main": "src/server.ts",
+  "main": "src/app.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "start": "./node_modules/.bin/ts-node ./src/server.ts",
-    "start:watch": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/server.ts",
+    "start": "./node_modules/.bin/ts-node ./src/app.ts",
+    "start:watch": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/app.ts",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/danielnguyen/mavis#readme",
   "devDependencies": {
-    "@types/node": "^8.0.47",
+    "@types/node": "^8.0.53",
     "jest": "^21.2.1",
     "nodemon": "^1.12.1",
     "rimraf": "^2.6.2",
@@ -40,7 +40,9 @@
   },
   "dependencies": {
     "@types/morgan": "^1.7.35",
-    "botkit": "^0.6.6",
+    "body-parser": "^1.18.2",
+    "botkit": "^0.6.7",
+    "express": "^4.16.2",
     "fs": "0.0.1-security",
     "morgan": "^1.9.0",
     "path": "^0.12.7"
