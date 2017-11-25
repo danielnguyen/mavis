@@ -1,3 +1,3 @@
-module.exports = ((app: any) => {
-
+export function skills(app: any) {
+    
 }

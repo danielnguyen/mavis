@@ -1,8 +1,9 @@
 import * as Botkit from 'BotKit';
 import { Config } from './config';
-import { BotFactory, BotFrameworkFactory } from './core/botfactory';
-import { Server } from './core/server';
+import { AlexaFactory, BotFrameworkFactory } from './botfactory';
+import { Server } from './server';
 import { Bot, BotkitBot } from './models';
+import { alexa } from './middleware';
 
 export default class Mavis {
 
@@ -45,10 +46,11 @@ export default class Mavis {
     public async start() {
         let webserver = new Server();
 
+        // Connect middleware
+        alexa(webserver.getExpressApp());
+        
         this._startTime = new Date();
         
-        webserver.addRoute(require('path').join(__dirname, 'routes/routes'));
-
         const _bots = this._bots;
         await webserver.start((webserver: Server) => {
             this._bots.forEach(bot => {

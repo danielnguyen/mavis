@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as morgan from 'morgan';
-import { Config } from '../config';
+import { Config } from './config';
 
 export interface ServerOptions {
     hostname?: string;
@@ -42,10 +42,9 @@ export class Server {
         this._server.use(morgan('dev'));  // log every request to the console 
 
     }
-
-    public addRoute(route: string) {
-        // Add any additionally specified routes
-        require(route)(this._server);
+    
+    public getExpressApp(): express.Application {
+        return this._server;
     }
 
     public async info() {
@@ -67,8 +66,8 @@ export class Server {
         if (this._config.secure) {
             // Start Server in https
             const options = {
-                cert: fs.readFileSync(require('path').join(__dirname, '../certs/server.crt')),
-                key: fs.readFileSync(require('path').join(__dirname, '../certs/key.pem'))
+                cert: fs.readFileSync(require('path').join(__dirname, './certs/server.crt')),
+                key: fs.readFileSync(require('path').join(__dirname, './certs/key.pem'))
             };
             https.createServer(options, this._server).listen(this._server.get('port'), this._server.get('host'), () => {
                 if (cb) cb(this._server);
