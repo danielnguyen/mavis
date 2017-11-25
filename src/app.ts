@@ -1,40 +1,34 @@
-import Botkit = require('botkit');
-import { WebServer } from './core/WebServer';
-
+import * as Botkit from 'BotKit';
 import { Config } from './config';
-import { } from './models';
+import { BotFramework } from './core/BotFramework';
+import { BotkitBot } from './models';
+import { WebServer } from './server';
 
-if (!Config.__DEVELOPMENT__ && (!Config.BOT_FRAMEWORK_CONFIG.appId || !Config.BOT_FRAMEWORK_CONFIG.appPassword)) {
-    console.log('Error: Specify Microsoft App Credentials in environment');
-    process.exit(1);
-}
+const bots: BotkitBot[] = [];
 
-const controller = Botkit.botframeworkbot({
+// Creating the Bot Framework Bot
+bots.push(new BotFramework({
     debug: Config.__DEVELOPMENT__,
-    hostname: Config.APP_HOST,
+    hostname: Config.APP_HOST
     // log, logger
+}, Config.BOT_FRAMEWORK_CONFIG));
+
+// Add skills from the /src/skills directory to each bot
+let normalizedPath = require('path').join(__dirname, 'skills');
+require('fs').readdirSync(normalizedPath).forEach(function(file: any) {
+    bots.forEach(bot => {
+        require('./skills/' + file)(bot.getController());
+    })
 });
 
-// Spawn a new bot using the Microsoft Bot Framework credentials
-const bot = controller.spawn(Config.BOT_FRAMEWORK_CONFIG);
 
-// Import bot skills from the /src/skills directory
-let normalizedPath = require("path").join(__dirname, "skills");
-require("fs").readdirSync(normalizedPath).forEach(function(file: any) {
-  require("./skills/" + file)(controller);
-});
+let webserver = new WebServer();
 
-let webServer = new WebServer();
+webserver.addRoute(require('path').join(__dirname, 'routes/routes'));
 
-webServer.addRoute(require("path").join(__dirname, "routes/routes"));
-
-webServer.start(function(webserver: WebServer) {
-    controller.log('** Starting webserver at https://' + webServer.config.hostname + ":" + webServer.config.port);
-    controller.createWebhookEndpoints(webserver, bot, function() {
-        // BotKit BotFramework is buggy because hardcodes 'http://' and the 
-        // BotFrameworkConfiguration interface doesn't have 'port', which is why it's undefined.
-        controller.log('** Serving webhook endpoints for the Microsoft Bot Framework at: '
-        + Config.APP_ENDPOINT + '/botframework/receive');
-        controller.log('** MAVIS is online!');
+webserver.start(function(webserver: WebServer) {
+    bots.forEach(bot => {
+        bot.createWebhookEndpoints(webserver);
     });
+    console.log('** MAVIS is online!');
 });
