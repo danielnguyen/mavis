@@ -26,7 +26,7 @@
         "no-function-constructor-with-string-args": true,
         "no-function-expression": true,
         "no-http-string": true,
-        "no-relative-imports": true,
+        "no-relative-imports": false,
         "no-reserved-keywords": true,
         "no-single-line-block-comment": true,
         "no-stateless-class": true,
