@@ -1,6 +1,6 @@
 import express = require('express');
 
-module.exports = function(app: express.Router) {
+module.exports = (app: express.Router) => {
     app.get('/healthcheck', (req, res) => {
         const status = {
             message: 'I\'m online!'

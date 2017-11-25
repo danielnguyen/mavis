@@ -1,2 +1,2 @@
-export * from './BotkitBot';
+export * from './Bot';
 export * from './Skill';

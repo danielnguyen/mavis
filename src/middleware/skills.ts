@@ -1,3 +1,3 @@
-module.exports = function(app: any) {
+module.exports = ((app: any) => {
 
 }
