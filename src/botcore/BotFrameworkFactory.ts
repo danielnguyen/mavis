@@ -1,7 +1,6 @@
 import * as BotKit from 'BotKit';
+import { BotkitFactory, BotFrameworkBot } from './index';
 import { BotFrameworkConfiguration, BotFrameworkController, BotFrameworkSpawnConfiguration } from 'BotKit';
-import { BotkitFactory } from './BotFactory';
-import { BotFrameworkBot, Skill } from '../models';
 import { Config } from '../config';
 
 export class BotFrameworkFactory extends BotkitFactory {
@@ -20,9 +19,5 @@ export class BotFrameworkFactory extends BotkitFactory {
         }
         
         return new BotFrameworkBot(this.spawn(config), this._controller);
-    }
-    
-    public addSkill(skill: Skill) {
-        // not implemented
     }
 }

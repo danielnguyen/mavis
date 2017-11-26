@@ -1,8 +1,8 @@
 import * as Botkit from 'BotKit';
 import { Config } from './config';
-import { BotFactory, BotFrameworkFactory } from './core/botfactory';
-import { Server } from './core/server';
-import { Bot, BotkitBot } from './models';
+import { AlexaFactory, AlexaConversationHandler,Bot, BotkitBot, BotkitConversationHandler, BotFrameworkFactory } from './botcore';
+import { Server } from './server';
+import { alexa } from './middleware';
 
 export default class Mavis {
 
@@ -12,27 +12,10 @@ export default class Mavis {
     constructor() {}
     
     public init() {
-
-        const bfFactory = new BotFrameworkFactory({
-            debug: Config.__DEVELOPMENT__,
-            hostname: Config.APP_HOST
-            // log, logger
-        })
-        
-        this._bots.push(bfFactory.createBot(Config.BOT_FRAMEWORK_CONFIG));
-
-
-        // Add skills from the /src/skills directory to each bot
-        let normalizedPath = require('path').join(__dirname, 'skills');
-        require('fs').readdirSync(normalizedPath).forEach((file: any) => {
-            this._bots.forEach(bot => {
-                if (bot instanceof BotkitBot) {
-                    require('./skills/' + file)(bot.getController());
-                }
-            })
-        });
-
+        this.initAlexaBot();
+        this.initBotFrameworkBot();
     }
+    
     public info() {
         return {
             uptime: Date.now() - this._startTime.getTime(),
@@ -45,10 +28,11 @@ export default class Mavis {
     public async start() {
         let webserver = new Server();
 
+        // Connect middleware
+        alexa(webserver.getExpressApp());
+        
         this._startTime = new Date();
         
-        webserver.addRoute(require('path').join(__dirname, 'routes/routes'));
-
         const _bots = this._bots;
         await webserver.start((webserver: Server) => {
             this._bots.forEach(bot => {
@@ -56,5 +40,26 @@ export default class Mavis {
             });
             console.log('** MAVIS is online!');
         });
+    }
+
+    private initAlexaBot() {
+
+    }
+
+    private initBotFrameworkBot() {
+        const bfFactory = new BotFrameworkFactory({
+            debug: Config.__DEVELOPMENT__,
+            hostname: Config.APP_HOST
+            // log, logger
+        })
+
+        // create the bot
+        const bfBot = bfFactory.createBot(Config.BOT_FRAMEWORK_CONFIG);
+
+        // hook up the handler/controller
+        new BotkitConversationHandler().handle(bfBot.getController());
+
+        // add to the bot list
+        this._bots.push(bfBot);
     }
 }

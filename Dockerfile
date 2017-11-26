@@ -1,4 +1,4 @@
-FROM node:8.9-alpine
+FROM node:8-alpine
 
 WORKDIR /usr/app
 EXPOSE 3000
