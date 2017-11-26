@@ -1,6 +1,6 @@
 import { Context, Handler, RequestBody } from 'alexa-sdk';
-import { BotFactory } from '.';
-import { Bot, Skill } from '../models';
+import { BotFactory } from './index';
+import { Bot } from '../botcore';
 
 export class AlexaFactory extends BotFactory {
 
@@ -12,10 +12,6 @@ export class AlexaFactory extends BotFactory {
 
     public createBot(): Bot {
         return undefined;
-    }
-    
-    public addSkill(skill: Skill) {
-        // not implemented
     }
 
     public handler(event: RequestBody<any>, context: Context, cb: any) {

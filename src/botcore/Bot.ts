@@ -1,4 +1,3 @@
-import { Skill } from '../models';
 import { BotFrameworkController } from 'BotKit';
 import { Config } from '../config';
 

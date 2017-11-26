@@ -1,8 +1,7 @@
 import { Controller } from 'BotKit';
-import { Bot, Skill } from '../models';
+import { Bot } from './index';
 
 export abstract class BotFactory {
-    abstract addSkill(skill: Skill): void;
     abstract createBot(config?: any): Bot;
 }
 
@@ -22,5 +21,7 @@ export abstract class BotkitFactory extends BotFactory {
     }
  }
 
+ export * from './Bot';
  export * from './AlexaFactory';
  export * from './BotFrameworkFactory';
+ export * from './handlers'

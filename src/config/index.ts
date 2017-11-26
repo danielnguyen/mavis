@@ -14,6 +14,8 @@ export class Config {
 
     public static APP_ENDPOINT: string = Config.APP_PROTOCOL + '://' + Config.APP_HOST + ':' + Config.APP_PORT;
 
+    public static ALLOW_NLP_LEARNING: boolean = process.env.ALLOW_NLP_LEARNING === 'true' ? true : false;
+
     public static BOT_FRAMEWORK_CONFIG: BotFrameworkSpawnConfiguration = {
         appId: process.env.MICROSOFT_APP_ID,
         appPassword: process.env.MICROSOFT_APP_PASSWORD

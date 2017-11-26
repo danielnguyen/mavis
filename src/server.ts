@@ -60,9 +60,8 @@ export class Server {
     }
 
     public start(cb: any): any {
-
         this._startTime = new Date();
-
+        
         if (this._config.secure) {
             // Start Server in https
             const options = {

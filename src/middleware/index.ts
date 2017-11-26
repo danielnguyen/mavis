@@ -1,2 +1,1 @@
-export * from './alexa';
-export * from './skills';
+export * from './alexa-verifier';
