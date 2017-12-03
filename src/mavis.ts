@@ -1,13 +1,14 @@
 import * as Botkit from 'BotKit';
 import { Config } from './config';
 import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
-import { BotkitLuis, BotkitLuisConfiguration } from './middleware/botkit-luis';
+import { BotkitLuis } from './middleware/botkit-luis';
 import { Server } from './server';
-import { Test } from './skills';
+import { TestDialogFlow, TestLuis } from './skills';
+import { BotkitDialogFlow } from './middleware/botkit-dialogflow-v1/index';
 
 export default class Mavis {
 
-    public _bots: Bot[] = [];
+    public _bots: BotkitBot[] = [];
     private _startTime: Date;
 
     constructor() {}
@@ -15,6 +16,7 @@ export default class Mavis {
     public init() {
         // this.initAlexaBot();
         this.initBotFrameworkBot();
+        this.initBotSkills();
     }
     
     public info() {
@@ -45,31 +47,38 @@ export default class Mavis {
             debug: Config.__DEVELOPMENT__,
             hostname: Config.APP_HOST
             // log, logger
-        })
-
+        })        
         // create the bot
         const bfBot = bfFactory.createBot(Config.BOT_FRAMEWORK_CONFIG);
-        
-       // bfBot.addReceiveMiddleware(); // Need to hook up User identification for security.
-
-        // Hook up NLP and update message with top intent.
-        if (!Config.__DEVELOPMENT__) { // Only hook up with LUIS APIs to save on API hits.
-            bfBot.addReceiveMiddleware(BotkitLuis.receive(Config.LUIS_CONFIG)); 
-        }
-
-        // Process message and select skill for top intent.
-        // bfBot.addHeardMiddleware(BotkitLuis.hear);
-
-
-        // bfBot.addCaptureMiddleware();
-        // bfBot.addSendMiddleware();
-
-        // Add skills to the bot
-        const bfBotController = bfBot.getController();
-        new Test().hears(bfBotController);
 
 
         // add to the bot list
         this._bots.push(bfBot);
+    }
+
+    private initBotSkills() {
+        this._bots.forEach((bot: BotkitBot) => {
+             // bfBot.addReceiveMiddleware(); // Need to hook up User identification for security.
+
+            // Hook up LUIS NLP (for non-Small Talk Skill)
+            if (!Config.__DEVELOPMENT__) { // Only hook up with LUIS APIs to save on API hits.
+                bot.addReceiveMiddleware(new BotkitLuis().receive(Config.LUIS_CONFIG)); 
+            }
+
+            // Hook up DialogFlow NLP (for Small Talk Skill)
+            bot.addReceiveMiddleware(new BotkitDialogFlow().receive(Config.DIALOGFLOW_CONFIG));
+
+            // Process message and select skill for top intent.
+            // bfBot.addHeardMiddleware(BotkitLuis.hear);
+
+
+            // bfBot.addCaptureMiddleware();
+            // bfBot.addSendMiddleware();
+
+            // Add skills to the bot
+            const botController = bot.getController();
+            new TestDialogFlow().hears(botController);
+            new TestLuis().hears(botController);
+        });
     }
 }

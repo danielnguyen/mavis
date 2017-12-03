@@ -1,15 +1,18 @@
 import { Bot, Message } from 'BotKit';
+import { DialogFlowConfiguration, DialogFlowMessage, Intent, DialogFlowResponse } from './index.d';
 import * as HTTP_STATUS from 'http-status-codes';
-import { MicrosoftLuisConfiguration, LuisMessage, Intent, LuisResponse } from './index.d';
-import * as querystring from 'querystring';
 import * as request from 'request';
 import { CoreOptions } from 'request';
+import * as querystring from 'querystring';
 
-export class BotkitLuis {
 
-    private static readonly LUIS_QUERY_API = '/luis/v2.0/apps/';
+export class BotkitDialogFlow {
 
-    private _luisConfig: MicrosoftLuisConfiguration;
+    private static readonly LANGUAGE: string = 'en';
+
+    private static readonly DIALOGFLOW_QUERY_API: string = '/v1/query';
+
+    private _dialogFlowConfig: DialogFlowConfiguration;
 
     constructor() {}
 
@@ -20,42 +23,56 @@ export class BotkitLuis {
      * @param message The received Botkit message.
      * @param next The next function which must be called to continue processing the middleware stack.
      */
-    public receive(options: MicrosoftLuisConfiguration) {
-        
-        if (!options || (!options.endpoint && !options.apiKey)) {
-            console.error('Error: Need to specify LUIS Configuration.');
+    public receive(options: DialogFlowConfiguration) {
+
+        if (!options || (!options.projectId && !options.accessToken)) {
+            console.error('Error: Need to specify DialogFlow Configuration.');
         } else {
-            this._luisConfig = options;
+            this._dialogFlowConfig = options;
+            console.log(this._dialogFlowConfig);   
         }
-    
-        return (bot: Bot<any, any>, message: LuisMessage, next: () => void) => {
+
+        return (bot: Bot<any, any>, message: any, next: () => void) => {
+            console.log(this._dialogFlowConfig);
             if (message.text && !message.topIntent) {
-                
+
                 // Construct the query params to pass to the LUIS API.
                 const queryParams = {
-                    'subscription-key': this._luisConfig.apiKey,
-                    'verbose': this._luisConfig.verbose,
-                    'timezoneOffset': '-300',
-                    'q': message.text // The utterance quiery
+                    v: '20150910', // DialogFlow API Version (Required)
+                    lang: BotkitDialogFlow.LANGUAGE,
+                    sessionId: 'some-session-id',
+                    query: message.text,
+                    timezone: 'America/New_York'
                 };
                 
-                // Construct the URL Endpoint to call with the params.
-                const url = this._luisConfig.endpoint + BotkitLuis.LUIS_QUERY_API + this._luisConfig.appId 
-                        + '?' + querystring.stringify(queryParams);
-                
+                // Construct the URL Endpoint to call the DialogFlow DetectIntent API.
+                const url = this._dialogFlowConfig.endpoint + BotkitDialogFlow.DIALOGFLOW_QUERY_API
+                    + '?' + querystring.stringify(queryParams);
+
                 // Configure any necessary properties.
-                const requestOptions: CoreOptions = {};
+                const requestOptions: CoreOptions = {
+                    headers: {
+                        Authorization: 'Bearer ' + this._dialogFlowConfig.accessToken,
+                    }
+                };
 
                 // Perform the API call.
                 request.get(url, requestOptions, (err, res, body) => {
                     if (err || res.statusCode !== HTTP_STATUS.OK) {
                         console.log(err);
                     } else {
-                        const data: LuisResponse = JSON.parse(body);
-                        message.topIntent = data.topScoringIntent;
-                        message.entities = data.entities;
+                        const data: DialogFlowResponse = JSON.parse(body);
+
+                        if (data.result) {
+                            const intent: Intent = {
+                                intent: data.result.action,
+                                score: data.result.score
+                            }
+                            message.topIntent = intent;
+                            message.fulfillment = data.result.fulfillment;
+                        }
                         
-                        console.log('AUDIT:\n\n url: '+url+'\nLUIS results' + body);
+                        console.log('AUDIT:\n\n url: '+url+'\nDialogFlow results' + body);
                     }
                     // Continue with next handler
                     next();
@@ -73,8 +90,7 @@ export class BotkitLuis {
      * @param patterns A list of supported NLP intents.
      * @param message The message being heard.
      */
-    public static hear(patterns: any, message: LuisMessage) {
-
+    public static hear(patterns: any, message: DialogFlowMessage) {
         let input: string = "";
 
         // if intent doesn't exist, use message.text as input as it is

@@ -14,8 +14,7 @@ export class BotFrameworkFactory extends BotkitFactory {
     
     public createBot(config: BotFrameworkSpawnConfiguration): BotFrameworkBot {
         if ((!this._config || !this._config.debug) && (!config || !config.appId || !config.appPassword)) {
-            console.log('Error: Specify Microsoft App Credentials in environment');
-            process.exit(1);
+            console.error('Error: Specify Microsoft App Credentials in environment');
         }
         
         return new BotFrameworkBot(this.spawn(config), this._controller);

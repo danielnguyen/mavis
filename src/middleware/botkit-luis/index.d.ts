@@ -77,7 +77,7 @@ export interface LuisResponse {
 /**
  * The interface for LUIS Configuration
  */
-export interface BotkitLuisConfiguration {
+export interface MicrosoftLuisConfiguration {
     /**
      * The Microsoft LUIS Endpoint.
      */

@@ -1,5 +1,6 @@
 import { BotFrameworkSpawnConfiguration } from 'BotKit';
-import { BotkitLuisConfiguration } from '../middleware/botkit-luis';
+import { DialogFlowConfiguration, BotkitDialogFlow } from '../middleware/botkit-dialogflow-v1';
+import { MicrosoftLuisConfiguration } from '../middleware/botkit-luis';
 
 export class Config {
     
@@ -22,7 +23,13 @@ export class Config {
         appPassword: process.env.MICROSOFT_APP_PASSWORD
     };
 
-    public static LUIS_CONFIG: BotkitLuisConfiguration = {
+    public static DIALOGFLOW_CONFIG: DialogFlowConfiguration = {
+        endpoint: process.env.DIALOGFLOW_ENDPOINT || 'https://api.dialogflow.com',
+        accessToken: process.env.DIALOGFLOW_ACCESS_TOKEN,
+        projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
+    }
+
+    public static LUIS_CONFIG: MicrosoftLuisConfiguration = {
         endpoint: process.env.LUIS_ENDPOINT || 'https://westus.api.cognitive.microsoft.com',
         appId: process.env.LUIS_APP_ID,
         apiKey: process.env.LUIS_API_KEY,
