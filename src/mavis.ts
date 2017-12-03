@@ -1,10 +1,9 @@
 import * as Botkit from 'BotKit';
 import { Config } from './config';
 import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
-import { BotkitLuis } from './middleware/botkit-luis';
+import { BotkitNLP } from './middleware/botkit-nlp';
 import { Server } from './server';
-import { TestDialogFlow, TestLuis } from './skills';
-import { BotkitDialogFlow } from './middleware/botkit-dialogflow-v1/index';
+import { TestDialogFlow, TestLuis, TestFinal } from './skills';
 
 export default class Mavis {
 
@@ -61,12 +60,14 @@ export default class Mavis {
              // bfBot.addReceiveMiddleware(); // Need to hook up User identification for security.
 
             // Hook up LUIS NLP (for non-Small Talk Skill)
-            if (!Config.__DEVELOPMENT__) { // Only hook up with LUIS APIs to save on API hits.
-                bot.addReceiveMiddleware(new BotkitLuis().receive(Config.LUIS_CONFIG)); 
-            }
+            // if (!Config.__DEVELOPMENT__) { // Only hook up with LUIS APIs to save on API hits.
+            //     bot.addReceiveMiddleware(new BotkitLuis().receive(Config.LUIS_CONFIG)); 
+            // }
 
             // Hook up DialogFlow NLP (for Small Talk Skill)
-            bot.addReceiveMiddleware(new BotkitDialogFlow().receive(Config.DIALOGFLOW_CONFIG));
+//            bot.addReceiveMiddleware(new BotkitNLP().receive(Config.DIALOGFLOW_CONFIG));
+  
+            bot.addReceiveMiddleware(new BotkitNLP().receive);            
 
             // Process message and select skill for top intent.
             // bfBot.addHeardMiddleware(BotkitLuis.hear);
@@ -79,6 +80,7 @@ export default class Mavis {
             const botController = bot.getController();
             new TestDialogFlow().hears(botController);
             new TestLuis().hears(botController);
+            new TestFinal().hears(botController);
         });
     }
 }
