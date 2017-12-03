@@ -22,6 +22,4 @@ export abstract class BotkitFactory extends BotFactory {
  }
 
  export * from './Bot';
- export * from './AlexaFactory';
  export * from './BotFrameworkFactory';
- export * from './handlers'

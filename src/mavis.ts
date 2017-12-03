@@ -1,8 +1,9 @@
 import * as Botkit from 'BotKit';
 import { Config } from './config';
-import { AlexaFactory, AlexaConversationHandler,Bot, BotkitBot, BotkitConversationHandler, BotFrameworkFactory } from './botcore';
+import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
+import { BotkitLuis, BotkitLuisConfiguration } from './middleware/botkit-luis';
 import { Server } from './server';
-import { alexa } from './middleware';
+import { Test } from './skills';
 
 export default class Mavis {
 
@@ -12,7 +13,7 @@ export default class Mavis {
     constructor() {}
     
     public init() {
-        this.initAlexaBot();
+        // this.initAlexaBot();
         this.initBotFrameworkBot();
     }
     
@@ -27,9 +28,6 @@ export default class Mavis {
 
     public async start() {
         let webserver = new Server();
-
-        // Connect middleware
-        alexa(webserver.getExpressApp());
         
         this._startTime = new Date();
         
@@ -42,10 +40,6 @@ export default class Mavis {
         });
     }
 
-    private initAlexaBot() {
-
-    }
-
     private initBotFrameworkBot() {
         const bfFactory = new BotFrameworkFactory({
             debug: Config.__DEVELOPMENT__,
@@ -55,9 +49,25 @@ export default class Mavis {
 
         // create the bot
         const bfBot = bfFactory.createBot(Config.BOT_FRAMEWORK_CONFIG);
+        
+       // bfBot.addReceiveMiddleware(); // Need to hook up User identification for security.
 
-        // hook up the handler/controller
-        new BotkitConversationHandler().handle(bfBot.getController());
+        // Hook up NLP and update message with top intent.
+        if (!Config.__DEVELOPMENT__) { // Only hook up with LUIS APIs to save on API hits.
+            bfBot.addReceiveMiddleware(BotkitLuis.receive(Config.LUIS_CONFIG)); 
+        }
+
+        // Process message and select skill for top intent.
+        // bfBot.addHeardMiddleware(BotkitLuis.hear);
+
+
+        // bfBot.addCaptureMiddleware();
+        // bfBot.addSendMiddleware();
+
+        // Add skills to the bot
+        const bfBotController = bfBot.getController();
+        new Test().hears(bfBotController);
+
 
         // add to the bot list
         this._bots.push(bfBot);

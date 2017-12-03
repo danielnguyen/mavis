@@ -4,7 +4,7 @@ dotenv.config(); // needs to be at the top.
 import Mavis from './mavis';
 
 main().catch(err => {
-    console.log('Cannot start Mavis.', err);
+    console.error('Cannot start Mavis.', err);
     process.exit(1);
 });
   
