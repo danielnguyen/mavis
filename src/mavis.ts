@@ -57,24 +57,18 @@ export default class Mavis {
 
     private initBotSkills() {
         this._bots.forEach((bot: BotkitBot) => {
-             // bfBot.addReceiveMiddleware(); // Need to hook up User identification for security.
-
-            // Hook up LUIS NLP (for non-Small Talk Skill)
-            // if (!Config.__DEVELOPMENT__) { // Only hook up with LUIS APIs to save on API hits.
-            //     bot.addReceiveMiddleware(new BotkitLuis().receive(Config.LUIS_CONFIG)); 
-            // }
-
-            // Hook up DialogFlow NLP (for Small Talk Skill)
-//            bot.addReceiveMiddleware(new BotkitNLP().receive(Config.DIALOGFLOW_CONFIG));
-  
+             
+            // bot.addReceiveMiddleware(); // Need to hook up User identification for security.
             bot.addReceiveMiddleware(new BotkitNLP().receive);            
 
-            // Process message and select skill for top intent.
-            // bfBot.addHeardMiddleware(BotkitLuis.hear);
-
-
-            // bfBot.addCaptureMiddleware();
-            // bfBot.addSendMiddleware();
+            /**
+             * Types of middleware you can add:
+             * 
+             * bot.addReceiveMiddleware();
+             * bot.addHeardMiddleware();
+             * bot.addCaptureMiddleware();
+             * bot.addSendMiddleware();
+             */
 
             // Add skills to the bot
             const botController = bot.getController();

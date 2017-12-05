@@ -60,3 +60,6 @@ typings/
 
 # Google Service details
 google-cloud-*.json
+
+# certificates
+certs/
