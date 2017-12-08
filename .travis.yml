@@ -39,5 +39,6 @@ deploy:
   region: Central
   app: Mavis
   env: Mavis-env
+  bucket_name: ${AWS_S3_BUCKET_NAME}
   on:
     repo: danielnguyen/mavis-bot
