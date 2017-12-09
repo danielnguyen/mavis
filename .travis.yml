@@ -23,9 +23,9 @@ before_script:
 
 script:
   - docker build -t $NAME src/.
-  - docker run -d -e HOST=0.0.0.0 -p "3000:443" $NAME
+  - docker run -d --name $NAME -e HOST=0.0.0.0 -p "3000:443" $NAME
   - npm run test
-  - curl --insecure -X GET https://localhost:3000/api/v1/healthcheck
+  - curl --insecure -X GET https://0.0.0.0:3000/api/v1/healthcheck
 
 after_failure:
   - docker ps -a
