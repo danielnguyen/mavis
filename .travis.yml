@@ -45,7 +45,7 @@ deploy:
   app: mavis
   env: Mavis-env
   bucket_name: ${AWS_S3_BUCKET_NAME}
-  zip-file: 'mavis.zip'
+  zip_file: 'mavis.zip'
   skip_cleanup: true
   on:
     repo: danielnguyen/mavis-bot
