@@ -17,11 +17,14 @@ main().catch(err => {
 });
   
 async function loadEnv(): Promise<void> {
-    if (await fs.existsSync(path.join(__dirname, '.env'))) {       
-        const dotenvConfig = await dotenv.config();
-        if (dotenvConfig.error) console.error('Error: ', dotenvConfig.error);
-        if (process.env.NODE_ENV !== 'production') console.log(dotenvConfig);
-    }
+    const dotenvFile = process.env.DOTENV || path.join(__dirname, '.env');
+    fs.exists(dotenvFile, async (exists) => {
+        if (exists) {
+            const dotenvConfig = await dotenv.config({path: dotenvFile});
+            if (dotenvConfig.error) console.error('Error: ', dotenvConfig.error);
+            if (process.env.NODE_ENV !== 'production') console.log(dotenvConfig);
+        }
+    });
 }
 
 async function main(): Promise<void> {    
