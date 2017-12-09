@@ -41,6 +41,9 @@ export class Server {
 
         this._server.use(morgan('dev'));  // log every request to the console 
 
+        this._server.get('/api/v1/healthcheck', (req, res) => {
+            res.send('{status: 200, message: "All good!"}');
+        });
     }
     
     public getExpressApp(): express.Application {
