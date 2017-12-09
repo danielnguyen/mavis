@@ -31,7 +31,7 @@ script:
   # Build the Docker image 
   - docker build -t $NAME src/.
 
-  # Run the Docker conatiner 
+  # Run the Docker container 
   - docker run -d --name $NAME -e HOST=0.0.0.0 -p "3000:443" $NAME
 
   # Sleep for a bit to allow time to start up
@@ -53,7 +53,7 @@ after_success:
 notifications:
   email: false
   
-# before_deploy:
+before_deploy:
 #   # Zip src dir for deployment otherwise it will zip the parent project with test stuff and deploy that
   - cd src
 #   - zip -r mavis.zip *
