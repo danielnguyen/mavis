@@ -30,6 +30,7 @@
     "@types/dotenv": "^4.0.2",
     "@types/express": "^4.0.39",
     "@types/morgan": "^1.7.35",
+    "@types/node": "^8.0.57",
     "@types/request": "^2.0.8",
     "@types/request-promise": "^4.1.39",
     "body-parser": "^1.18.2",
@@ -43,6 +44,8 @@
     "path": "^0.12.7",
     "querystring": "^0.2.0",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
   }
 }
