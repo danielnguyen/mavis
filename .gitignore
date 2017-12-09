@@ -62,7 +62,7 @@ typings/
 google-cloud-*.json
 
 # certificates
-certs/
+# certs/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
