@@ -21,11 +21,7 @@
     "url": "https://github.com/danielnguyen/mavis/issues"
   },
   "homepage": "https://github.com/danielnguyen/mavis#readme",
-  "devDependencies": {
-    "@types/node": "^8.0.53",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.6.1"
-  },
+  "devDependencies": {},
   "engineStrict": true,
   "engines": {
     "node": ">= 8.9.x"
