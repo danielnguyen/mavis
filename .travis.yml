@@ -48,14 +48,14 @@ after_failure:
   - docker logs $NAME
 
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'master' ]] ./scripts/travis/docker-tag-and-push.sh fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/travis/docker-tag-and-push.sh; fi
 
 notifications:
   email: false
   
 # before_deploy:
 #   # Zip src dir for deployment otherwise it will zip the parent project with test stuff and deploy that
-#   - cd src
+  - cd src
 #   - zip -r mavis.zip *
 
 deploy:
