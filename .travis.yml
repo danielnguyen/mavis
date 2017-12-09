@@ -33,7 +33,7 @@ notifications:
   
 before_deploy:
   # Zip src dir for deployment otherwise it will zip the parent project with test stuff and deploy that
-  - cd src/ && zip -r ../mavis.zip . && cd ..
+  - cd src/
 
 deploy:
   provider: elasticbeanstalk
@@ -44,7 +44,6 @@ deploy:
   app: mavis
   env: Mavis-env
   bucket_name: ${AWS_S3_BUCKET_NAME}
-  zip_file: mavis.zip
   skip_cleanup: true
   on:
     repo: danielnguyen/mavis-bot
