@@ -11,9 +11,8 @@ export class LUIS {
     private _luisConfig: MicrosoftLuisConfiguration;
 
     constructor(options: MicrosoftLuisConfiguration) {
-        if (!options || (!options.endpoint && !options.appId && !options.appId)) {
-            console.error('Error: Please specify LUIS credentials.');
-            process.exit(1);
+        if (!options || !options.endpoint || !options.appId || !options.apiKey) {
+            console.error('Error: Please specify LUIS credentials. Got: ' + JSON.stringify(options));
         } else {
             this._luisConfig = options;            
         }
@@ -49,7 +48,7 @@ export class LUIS {
                 return data.topScoringIntent;
             }
         }).catch((error) => {
-            console.error('LUIS Middleware Error');            
+            console.error('LUIS Middleware Error: ', error);            
         });
     }
 }

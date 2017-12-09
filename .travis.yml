@@ -38,7 +38,7 @@ script:
   - sleep 30
 
   # Health check
-  - curl --insecure -X GET https://0.0.0.0:3000/api/v1/healthcheck
+  - curl -X GET http://0.0.0.0:3000/api/v1/healthcheck
 
   # Run tests
   - npm run test
@@ -48,7 +48,7 @@ after_failure:
   - docker logs $NAME
 
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/travis/docker-tag-and-push.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'prod' ]]; then ./scripts/travis/docker-tag-and-push.sh; fi
 
 notifications:
   email: false
@@ -56,7 +56,6 @@ notifications:
 before_deploy:
 #   # Zip src dir for deployment otherwise it will zip the parent project with test stuff and deploy that
   - cd src
-#   - zip -r mavis.zip *
 
 deploy:
   provider: elasticbeanstalk
@@ -66,8 +65,6 @@ deploy:
   app: mavis
   env: mavis-env-docker
   bucket_name: $AWS_S3_BUCKET_NAME
-  # zip_file: 'mavis.zip'
-  skip_cleanup: true
   on:
     repo: danielnguyen/mavis-bot
-    branch: master
+    branch: prod
