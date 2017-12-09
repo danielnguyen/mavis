@@ -1,4 +1,4 @@
-import { Bot, Message } from 'BotKit';
+import { Bot, Message } from 'botkit';
 import * as HTTP_STATUS from 'http-status-codes';
 import { MicrosoftLuisConfiguration, LuisResponse } from './index.d';
 import * as querystring from 'querystring';
