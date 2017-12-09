@@ -48,8 +48,8 @@ after_failure:
   - docker logs $NAME
 
 after_success:
-  - docker tag $NAME $DOCKER_REPO/$NAME
-  - docker push $DOCKER_REPO/$NAME
+  - ./scripts/travis/docker-tag-and-push.sh
+  # - if [[ $TRAVIS_BRANCH == 'master' ]] ./scripts/travis/docker-tag-and-push.sh fi
 
 notifications:
   email: false
