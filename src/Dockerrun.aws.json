@@ -1,0 +1,12 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+      "Name": "danielnguyen/mavis",
+      "Update": "true"
+    },
+    "Ports": [
+      {
+        "ContainerPort": "443"
+      }
+    ]
+  }
