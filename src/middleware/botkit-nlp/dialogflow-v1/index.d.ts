@@ -1,4 +1,4 @@
-import { Message } from 'BotKit';
+import { Message } from 'botkit';
 import { Intent, Entity } from '../index';
 
 export interface DialogFlowMessage extends Message {
@@ -36,11 +36,11 @@ export interface DialogFlowFulfillment {
 }
 
 export interface DialogFlowResult {
-    source: string,
-    action: string,
-    actionIncomplete: boolean,
-    paramters: any,
-    context: any[],
+    source?: string,
+    action?: string,
+    actionIncomplete?: boolean,
+    paramters?: any,
+    context?: any[],
     fulfillment: DialogFlowFulfillment,
     score: number
 }

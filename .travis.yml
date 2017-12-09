@@ -13,7 +13,13 @@ services:
 
 env:
   global:
-  - Name=mavis
+  - NAME=mavis
+
+before_install:
+  # Install certbot to generate certs
+  # - wget https://dl.eff.org/certbot-auto
+  # - chmod a+x certbot-auto
+
 
 install:
   - npm install
@@ -22,24 +28,43 @@ before_script:
   # - npm run lint
 
 script:
+  # Build the Docker image 
+  - docker build -t $NAME src/.
+
+  # Run the Docker container 
+  - docker run -d --name $NAME -e HOST=0.0.0.0 -p "3000:443" $NAME
+
+  # Sleep for a bit to allow time to start up
+  - sleep 30
+
+  # Health check
+  - curl -X GET http://0.0.0.0:3000/api/v1/healthcheck
+
+  # Run tests
   - npm run test
 
 after_failure:
   - docker ps -a
   - docker logs $NAME
 
+after_success:
+  - if [[ $TRAVIS_BRANCH == 'prod' ]]; then ./scripts/travis/docker-tag-and-push.sh; fi
+
 notifications:
   email: false
+  
+before_deploy:
+#   # Zip src dir for deployment otherwise it will zip the parent project with test stuff and deploy that
+  - cd src
 
 deploy:
   provider: elasticbeanstalk
-  access_key_id: AKIAI5KN4FKDSFLZXAGQ
+  access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key:
-    secure: qasZI2bKLwmeFqvcbGVpUsHfQIlab3hTLkUBeaY03Cmlfh15MpxiMANbKy0EIe/HyZ+wLpREM5DYs9DYG47IvD/cNl6AwIlJNBGUpjVT2bTJAIdp+hRpLdFaLtivnqnNAmfGRANhfx+Ju+Ei9FhkYxcXmpToMxC6uvzw4mhTdFebg6ZbiR9iuURhiYYQ+JSDvFwUome0lT3yw4hNXSHjQed2ICuOavt7uhI77s3aZeyxOEBTDXraDnl6iqbqv29uR3jQpOP/oJNN9O3QXN1OuGcFxlWqu4ZodFXmgVyGq/PSQprUDpk/YUDWK5/2TP1kR52um1Xd5E94+H97PggIYbY5/jDByCpi34oWPspqsyVL9QCke7jYNGUQhdZe1LUyVWdawDpLBVOYhLSpyy/TpehL99K/MRT06LCxZO9wzblTUBobSX/LpwISH9ZP4yvcaZcrPFBZrx16WPd1y0LLksZC5gJgs7EFKe5RQUl7eews352PmrN5rk1mWiJnYmwz/Nqp6Ndc073OeIREiKWTaUoFx2Xyz8+Ueo19PnB7OB+W6dgYIZysSwJ40GfPVLcm51TYkftTE9REDSlfwQyp0ru51w6fXMop0NhwtfACY+HLPzqfxB291Msg835/Rav79Tp6hJhpbpR82OhkgxDdvoYeGcWtpMwwGQBxcLrgkUU=
-  region: Central
-  app: Mavis
-  env: Mavis-env
-  bucket_name: ${AWS_S3_BUCKET_NAME}
+    secure: edgsdjloM6BYvKfceVy20E+VrUcD3YXsMWPw04rUYcv8hkQ4nZvN5yHw6cFrIY1DABvv9WaGR57E/P2QgU1sqVcOz1dwWf3N9KsCDlgU+aNKQ5nntPLt3p2sjtEJlHK05XA/smuiz+7pt5z+YRo7adkJG7kBnuRh5BmBiY2oWYEQfNj3tJ6+g8D6CdZFJMoff4TX+4fR+xkd1qrUoK40liXe2qMqVuC7kFge75zdFiWGzHx7vfixaeaxQrskq0eb/Cc6iVMMzFs67HqxiSyZjLiCKSql3zjQFMHku5L84ZgsIXIYOnLx2R8WGhxyyIlKZhiLxaJRVESY6k9zCpvNc11prkV/TDWOivlGLyODjx8a4sByOxNogqAeBAoLOjKsq88Veiyn2d2Ehz0pZibOhPMGVXTrjLQzGIBdiJj8zidKNXf4HWd4o+4Wbj3l2nndoSeutVFf/Ba9AApk1ezo0yhIgLNbWNSsmnRFwEVliJK1SQXbJIhq/boZwMBq610MU72bSF4x2vz0R2olB24Pe3bedVKbp+toZtVzXimrFsVllidYce9JbPTt3cU/g3c1sNAOpcYMvrN5URt/UmlJMku9CZJ2DPHD6I+alylRY41wVSaJQUDta69FHqGSgljg4nO7XFqqxeQ0Sw4+NHJkDWsD3n+8GoboMyZmhRmTOgI=
+  app: mavis
+  env: mavis-env-docker
+  bucket_name: $AWS_S3_BUCKET_NAME
   on:
     repo: danielnguyen/mavis-bot
     branch: prod

@@ -1,6 +1,6 @@
-import * as BotKit from 'BotKit';
+import * as BotKit from 'botkit';
 import { BotkitFactory, BotFrameworkBot } from './index';
-import { BotFrameworkConfiguration, BotFrameworkController, BotFrameworkSpawnConfiguration } from 'BotKit';
+import { BotFrameworkConfiguration, BotFrameworkController, BotFrameworkSpawnConfiguration } from 'botkit';
 import { Config } from '../config';
 
 export class BotFrameworkFactory extends BotkitFactory {

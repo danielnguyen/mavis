@@ -25,14 +25,14 @@
   },
   "homepage": "https://github.com/danielnguyen/mavis#readme",
   "devDependencies": {
-    "@types/node": "^8.0.53",
+    "@types/node": "^8.0.57",
     "jest": "^21.2.1",
     "nodemon": "^1.12.1",
     "rimraf": "^2.6.2",
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.2"
   },
   "engineStrict": true,
   "engines": {

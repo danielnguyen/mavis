@@ -1,4 +1,4 @@
-import { Bot, Message } from 'BotKit';
+import { Bot, Message } from 'botkit';
 import * as HTTP_STATUS from 'http-status-codes';
 import { MicrosoftLuisConfiguration, LuisResponse } from './index.d';
 import * as querystring from 'querystring';
@@ -11,9 +11,8 @@ export class LUIS {
     private _luisConfig: MicrosoftLuisConfiguration;
 
     constructor(options: MicrosoftLuisConfiguration) {
-        if (!options || (!options.endpoint && !options.appId && !options.appId)) {
-            console.error('Error: Please specify LUIS credentials.');
-            process.exit(1);
+        if (!options || !options.endpoint || !options.appId || !options.apiKey) {
+            console.error('Error: Please specify LUIS credentials. Got: ' + JSON.stringify(options));
         } else {
             this._luisConfig = options;            
         }
@@ -48,6 +47,8 @@ export class LUIS {
                 const data: LuisResponse = JSON.parse(body);
                 return data.topScoringIntent;
             }
+        }).catch((error) => {
+            console.error('LUIS Middleware Error: ', error);            
         });
     }
 }

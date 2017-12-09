@@ -4,11 +4,11 @@
   "description": "My Awesome Virtual Intelligence Service",
   "main": "app.ts",
   "directories": {
-    "test": "test"
+    "test": "echo \"Tests not implemented.\""
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "start": "ts-node ./app.ts",
+    "start": "./node_modules/.bin/ts-node ./app.ts",
     "start:watch": "nodemon --exec ts-node -- ./app.ts"
   },
   "repository": {
@@ -21,19 +21,16 @@
     "url": "https://github.com/danielnguyen/mavis/issues"
   },
   "homepage": "https://github.com/danielnguyen/mavis#readme",
-  "devDependencies": {
-    "@types/node": "^8.0.53",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.6.1"
-  },
+  "devDependencies": {},
   "engineStrict": true,
   "engines": {
-    "node": ">= 8.9.x"
+    "node": ">= 8.8.1"
   },
   "dependencies": {
     "@types/dotenv": "^4.0.2",
     "@types/express": "^4.0.39",
     "@types/morgan": "^1.7.35",
+    "@types/node": "^8.0.57",
     "@types/request": "^2.0.8",
     "@types/request-promise": "^4.1.39",
     "body-parser": "^1.18.2",
@@ -47,6 +44,8 @@
     "path": "^0.12.7",
     "querystring": "^0.2.0",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
   }
 }

@@ -1,4 +1,4 @@
-import { BotFrameworkSpawnConfiguration } from 'BotKit';
+import { BotFrameworkSpawnConfiguration } from 'botkit';
 import { DialogFlowConfiguration } from '../middleware/botkit-nlp/dialogflow-v1';
 import { MicrosoftLuisConfiguration } from '../middleware/botkit-nlp/luis';
 
@@ -6,7 +6,7 @@ export class Config {
     
     public static __DEVELOPMENT__: boolean = process.env.NODE_ENV !== 'production' ? true : false;
     
-    public static SECURE: boolean = process.env.HTTP === 'on' ? false : true;
+    public static SECURE: boolean = process.env.HTTPS === 'on' ? true : false;
 
     public static APP_PROTOCOL: string = Config.SECURE ? 'https' : 'http';
 

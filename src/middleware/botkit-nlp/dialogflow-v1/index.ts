@@ -1,4 +1,4 @@
-import { Bot, Message } from 'BotKit';
+import { Bot, Message } from 'botkit';
 import { Intent } from '../index';
 import { DialogFlowConfiguration, DialogFlowMessage, DialogFlowResult, DialogFlowResponse } from './index.d';
 import * as HTTP_STATUS from 'http-status-codes';
@@ -15,9 +15,8 @@ export class DialogFlow {
     private _dialogFlowConfig: DialogFlowConfiguration;
 
     constructor(options: DialogFlowConfiguration) {
-        if (!options || (!options.endpoint && !options.projectId && !options.accessToken)) {
+        if (!options || !options.endpoint || !options.projectId || !options.accessToken) {
             console.error('Error: Please specify DialogFlow credentials.');
-            process.exit(1);
         } else {
             this._dialogFlowConfig = options;            
         }
@@ -51,6 +50,8 @@ export class DialogFlow {
                 const data: DialogFlowResponse = JSON.parse(body);
                 return data.result;
             }
+        }).catch((error) => {
+            console.error('DialogFlow Middleware Error: ', error);  
         });
     }
 }
