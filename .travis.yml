@@ -22,10 +22,20 @@ before_script:
   # - npm run lint
 
 script:
+  # Build the Docker image 
   - docker build -t $NAME src/.
+
+  # Run the Docker conatiner 
   - docker run -d --name $NAME -e HOST=0.0.0.0 -p "3000:443" $NAME
-  - npm run test
+
+  # Sleep for a bit to allow time to start up
+  - sleep 30
+
+  # Health check
   - curl --insecure -X GET https://0.0.0.0:3000/api/v1/healthcheck
+
+  # Run tests
+  - npm run test
 
 after_failure:
   - docker ps -a
