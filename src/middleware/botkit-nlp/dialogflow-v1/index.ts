@@ -51,6 +51,8 @@ export class DialogFlow {
                 const data: DialogFlowResponse = JSON.parse(body);
                 return data.result;
             }
+        }).catch((error) => {
+            console.error('DialogFlow Middleware Error');
         });
     }
 }
