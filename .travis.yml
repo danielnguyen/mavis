@@ -33,7 +33,7 @@ notifications:
   
 before_deploy:
   # Zip src dir for deployment otherwise it will zip the parent project with test stuff and deploy that
-  - zip -r mavis.zip src/
+  - cd src/ && zip -r ../mavis.zip . && cd ..
 
 deploy:
   provider: elasticbeanstalk
