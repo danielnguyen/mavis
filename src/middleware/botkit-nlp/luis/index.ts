@@ -48,6 +48,8 @@ export class LUIS {
                 const data: LuisResponse = JSON.parse(body);
                 return data.topScoringIntent;
             }
+        }).catch((error) => {
+            console.error('LUIS Middleware Error');            
         });
     }
 }
