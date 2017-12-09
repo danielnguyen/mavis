@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
+import * as fs from 'fs';
 
 // Need to load env before importing anything else.
 loadEnv().catch(err => {
@@ -16,10 +17,11 @@ main().catch(err => {
 });
   
 async function loadEnv(): Promise<void> {
-    const dotenvFile = process.env.DOTENV || path.join(__dirname, '.env');
-    const dotenvConfig = await dotenv.config({path: dotenvFile});
-    if (dotenvConfig.error) console.error('Error: ', dotenvConfig.error);
-    if (process.env.NODE_ENV !== 'production') console.log(dotenvConfig);
+    if (await fs.existsSync(path.join(__dirname, '.env'))) {       
+        const dotenvConfig = await dotenv.config();
+        if (dotenvConfig.error) console.error('Error: ', dotenvConfig.error);
+        if (process.env.NODE_ENV !== 'production') console.log(dotenvConfig);
+    }
 }
 
 async function main(): Promise<void> {    

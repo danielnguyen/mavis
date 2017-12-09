@@ -1,4 +1,4 @@
-import { Controller } from 'BotKit';
+import { Controller } from 'botkit';
 import { Bot } from './index';
 
 export abstract class BotFactory {

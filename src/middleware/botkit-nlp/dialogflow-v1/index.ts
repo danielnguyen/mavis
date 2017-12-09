@@ -1,4 +1,4 @@
-import { Bot, Message } from 'BotKit';
+import { Bot, Message } from 'botkit';
 import { Intent } from '../index';
 import { DialogFlowConfiguration, DialogFlowMessage, DialogFlowResult, DialogFlowResponse } from './index.d';
 import * as HTTP_STATUS from 'http-status-codes';

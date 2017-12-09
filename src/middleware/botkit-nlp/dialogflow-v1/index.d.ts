@@ -1,4 +1,4 @@
-import { Message } from 'BotKit';
+import { Message } from 'botkit';
 import { Intent, Entity } from '../index';
 
 export interface DialogFlowMessage extends Message {

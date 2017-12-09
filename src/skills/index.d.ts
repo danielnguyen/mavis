@@ -1,4 +1,4 @@
-import { Controller } from 'BotKit';
+import { Controller } from 'botkit';
 
 export interface Skill {
     

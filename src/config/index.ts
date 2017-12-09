@@ -1,4 +1,4 @@
-import { BotFrameworkSpawnConfiguration } from 'BotKit';
+import { BotFrameworkSpawnConfiguration } from 'botkit';
 import { DialogFlowConfiguration } from '../middleware/botkit-nlp/dialogflow-v1';
 import { MicrosoftLuisConfiguration } from '../middleware/botkit-nlp/luis';
 

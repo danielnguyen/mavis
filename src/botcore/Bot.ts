@@ -1,4 +1,4 @@
-import { BotFrameworkController, Message } from 'BotKit';
+import { BotFrameworkController, Message } from 'botkit';
 import { Config } from '../config';
 import { Skill } from '../skills';
 

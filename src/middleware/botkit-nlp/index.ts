@@ -1,9 +1,9 @@
-import { Bot, Message } from 'BotKit';
+import { Bot, Message } from 'botkit';
 import * as HTTP_STATUS from 'http-status-codes';
 import { NLPMessage, Intent } from './index.d';
 import { DialogFlow, DialogFlowResult } from './dialogflow-v1';
 import { LUIS } from './luis';
-import { Config } from '../../Config';
+import { Config } from '../../config';
 import * as request from 'request';
 import { Promise } from 'bluebird';
 

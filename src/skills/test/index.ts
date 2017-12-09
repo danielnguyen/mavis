@@ -1,4 +1,4 @@
-import { Controller, Message} from 'BotKit';
+import { Controller, Message} from 'botkit';
 import { BotkitNLP, NLPMessage } from '../../middleware/botkit-nlp';
 import { DialogFlow } from '../../middleware/botkit-nlp/dialogflow-v1';
 import { LUIS } from '../../middleware/botkit-nlp/luis'

@@ -4,11 +4,11 @@
   "description": "My Awesome Virtual Intelligence Service",
   "main": "app.ts",
   "directories": {
-    "test": "test"
+    "test": "echo \"Tests not implemented.\""
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "start": "ts-node ./app.ts",
+    "start": "./node_modules/.bin/ts-node ./app.ts",
     "start:watch": "nodemon --exec ts-node -- ./app.ts"
   },
   "repository": {
@@ -24,7 +24,7 @@
   "devDependencies": {},
   "engineStrict": true,
   "engines": {
-    "node": "8.8.1"
+    "node": ">= 8.8.1"
   },
   "dependencies": {
     "@types/dotenv": "^4.0.2",

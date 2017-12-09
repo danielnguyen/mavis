@@ -1,4 +1,4 @@
-import * as Botkit from 'BotKit';
+import * as Botkit from 'botkit';
 import { Config } from './config';
 import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
 import { BotkitNLP } from './middleware/botkit-nlp';
