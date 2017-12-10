@@ -16,7 +16,7 @@ export class DialogFlow {
 
     constructor(options: DialogFlowConfiguration) {
         if (!options || !options.endpoint || !options.projectId || !options.accessToken) {
-            console.error('Error: Please specify DialogFlow credentials.');
+            console.error('Error: Please specify DialogFlow credentials. Got: ' + JSON.stringify(options));
         } else {
             this._dialogFlowConfig = options;            
         }
