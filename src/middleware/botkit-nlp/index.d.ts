@@ -12,7 +12,10 @@ export interface Intent {
      */
     score: number
 
-
+    /**
+     * Any additional data (optional)
+     */
+    data?: any
 }
 
 export interface Entity {

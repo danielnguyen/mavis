@@ -22,17 +22,21 @@ export class Config {
         appId: process.env.MICROSOFT_APP_ID,
         appPassword: process.env.MICROSOFT_APP_PASSWORD
     };
-
-    public static DIALOGFLOW_CONFIG: DialogFlowConfiguration = {
-        endpoint: process.env.DIALOGFLOW_ENDPOINT || 'https://api.dialogflow.com',
-        accessToken: process.env.DIALOGFLOW_ACCESS_TOKEN,
-        projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
-    }
-
+    
     public static LUIS_CONFIG: MicrosoftLuisConfiguration = {
         endpoint: process.env.LUIS_ENDPOINT || 'https://westus.api.cognitive.microsoft.com',
         appId: process.env.LUIS_APP_ID,
         apiKey: process.env.LUIS_API_KEY,
         verbose: process.env.LUIS_VERBOSE === 'true' ? true : false
     }
+
+    public static DIALOGFLOW_CONFIG: DialogFlowConfiguration = {
+        endpoint: process.env.DIALOGFLOW_ENDPOINT || 'https://api.dialogflow.com',
+        accessToken: process.env.DIALOGFLOW_ACCESS_TOKEN,
+        projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
+    }
+    
+    public static ENABLE_LUIS: boolean = process.env.ENABLE_LUIS === 'true' ? true : false;
+    
+    public static ENABLE_DIALOGFLOW: boolean = process.env.ENABLE_DIALOGFLOW === 'true' ? true : false;
 }

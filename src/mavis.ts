@@ -3,7 +3,7 @@ import { Config } from './config';
 import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
 import { BotkitNLP } from './middleware/botkit-nlp';
 import { Server } from './server';
-import { TestDialogFlow, TestLuis, TestFinal } from './skills';
+import { FinalSkill, SmartHomeSkill, VJSkill } from './skills';
 
 export default class Mavis {
 
@@ -72,9 +72,12 @@ export default class Mavis {
 
             // Add skills to the bot
             const botController = bot.getController();
-            new TestDialogFlow().hears(botController);
-            new TestLuis().hears(botController);
-            new TestFinal().hears(botController);
+
+            new SmartHomeSkill().hears(botController);
+
+            new VJSkill().hears(botController);
+            
+            new FinalSkill().hears(botController);
         });
     }
 }

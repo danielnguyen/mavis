@@ -29,25 +29,30 @@ export class BotkitNLP {
             let dialogflowResult: DialogFlowResult;
 
             async function luisRequest() {
-                await luis.getTopIntent(message.text)
-                .then((data: any) => {
-                    const luisData = JSON.parse(data);  
-                    luisTopIntent = luisData.topScoringIntent;                    
-                }).catch((error) => {
-                    console.error('Botkit NLP Middleware Error: LUIS');
-                    luisTopIntent = { intent: "", score: -1 };        
-                });
+                luisTopIntent = { intent: "", score: -1 };
+                if (Config.ENABLE_LUIS) {
+                    await luis.getTopIntent(message.text)
+                    .then((data: any) => {
+                        const luisData = JSON.parse(data);  
+                        luisTopIntent = luisData.topScoringIntent;                    
+                    }).catch((error) => {
+                        console.error('Botkit NLP Middleware Error: LUIS');
+                        luisTopIntent = { intent: "", score: -1 };        
+                    });
+                }
             }
 
             async function dialogFlowRequest() {
-                await dialogflow.getDialogFlowResult(message.text)
-                .then((data: any) => {
-                    const dialogflowData = JSON.parse(data);
-                    dialogflowResult = dialogflowData.result;
-                }).catch((error) => {
-                    console.error('Botkit NLP Middleware Error: DialogFlow');
-                    dialogflowResult = { fulfillment: null, score: -1 };        
-                });
+                dialogflowResult = { fulfillment: null, score: -1 };
+                if (Config.ENABLE_DIALOGFLOW) {
+                    await dialogflow.getDialogFlowResult(message.text)
+                    .then((data: any) => {
+                        const dialogflowData = JSON.parse(data);
+                        dialogflowResult = dialogflowData.result;
+                    }).catch((error) => {
+                        console.error('Botkit NLP Middleware Error: DialogFlow');
+                    });
+                }
             }
 
             function handleRejection(p: any) {
@@ -63,14 +68,16 @@ export class BotkitNLP {
                 if (luisTopIntent.score > dialogflowResult.score) {
                     intent = {
                         intent: luisTopIntent.intent,
-                        score: luisTopIntent.score
+                        score: luisTopIntent.score,
+                        data: luisTopIntent
                     };
                     message.topIntent = intent;
                     console.log('Using LUIS Intent: '+JSON.stringify(intent));
                 } else if (luisTopIntent.score < dialogflowResult.score) {
                     intent = {
                         intent: dialogflowResult.action,
-                        score: dialogflowResult.score
+                        score: dialogflowResult.score,
+                        data: dialogflowResult
                     };
                     message.topIntent = intent;
                     // Add fulfillments as well:
