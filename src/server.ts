@@ -16,7 +16,7 @@ export interface ServerOptions {
 export class Server {
 
     public _config: ServerOptions;
-    protected _server: express.Application;
+    public _server: express.Application;
     private _startTime: Date;
 
     private static readonly defaultConfig: ServerOptions = {
@@ -62,7 +62,7 @@ export class Server {
         };
     }
 
-    public start(cb: any): any {
+    public start(cb: (server: Express.Application) => void): void {
         this._startTime = new Date();
         
         if (this._config.secure) {

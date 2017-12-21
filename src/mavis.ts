@@ -1,18 +1,22 @@
-import * as Botkit from 'botkit';
+import logger from './middleware/logger';
 import { Config } from './config';
-import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
-import { BotkitNLP } from './middleware/botkit-nlp';
 import { Server } from './server';
-import { FinalSkill, SmartHomeSkill, VJSkill } from './skills';
+import { BotFrameworkFactory, BotFrameworkObject } from './botfactory';
+import { DialogFlowRecognizer } from './middleware/dialogflow';
+import { DefauktSkill, SmallTalkSkill, SmartHomeSkill, SecretarySkill, MediaManagerSkill } from './skills';
+import { IntentRecognizerSet, RecognizeOrder } from 'botbuilder';
 
 export default class Mavis {
 
-    public _bots: BotkitBot[] = [];
+    public _bots: BotFrameworkObject[] = [];
+    private _webserver: Server;
     private _startTime: Date;
 
     constructor() {}
     
     public init() {
+        this._webserver = new Server();
+
         // this.initAlexaBot();
         this.initBotFrameworkBot();
         this.initBotSkills();
@@ -21,63 +25,52 @@ export default class Mavis {
     public info() {
         return {
             uptime: Date.now() - this._startTime.getTime(),
-            // TODO(bajtos) move this code to Application, the URL should
+            // TODO move this code to Application, the URL should
             // be accessible via this.get('http.url')
             url: Config.APP_ENDPOINT
         };
     }
 
     public async start() {
-        let webserver = new Server();
-        
         this._startTime = new Date();
-        
-        const _bots = this._bots;
-        await webserver.start((webserver: Server) => {
-            this._bots.forEach(bot => {
-                bot.createWebhookEndpoints(webserver);
+        await this._webserver.start(() => {
+            const app = this._webserver.getExpressApp();
+            this._bots.forEach((botObject: BotFrameworkObject) => {
+                app.post('/api/messages', botObject.connector.listen());
+                logger.info('** Bot is available as a Microsoft Bot Framework Bot at: ' + Config.APP_ENDPOINT + '/api/messages');
             });
-            console.log('** MAVIS is online!');
+            logger.info('** MAVIS is online!');
         });
     }
 
     private initBotFrameworkBot() {
-        const bfFactory = new BotFrameworkFactory({
-            debug: Config.__DEVELOPMENT__,
-            hostname: Config.APP_HOST
-            // log, logger
-        })        
+        const bfFactory = new BotFrameworkFactory(Config.BOT_FRAMEWORK_CONFIG);     
         // create the bot
-        const bfBot = bfFactory.createBot(Config.BOT_FRAMEWORK_CONFIG);
-
-
+        const bfBot: BotFrameworkObject = bfFactory.createBot();
+        // attach loggers to the bot
+        bfBot.bot.on('error', function (err) {
+            logger.error(err);
+        });
         // add to the bot list
         this._bots.push(bfBot);
     }
 
     private initBotSkills() {
-        this._bots.forEach((bot: BotkitBot) => {
-             
-            // bot.addReceiveMiddleware(); // Need to hook up User identification for security.
-            bot.addReceiveMiddleware(new BotkitNLP().receive);            
-
-            /**
-             * Types of middleware you can add:
-             * 
-             * bot.addReceiveMiddleware();
-             * bot.addHeardMiddleware();
-             * bot.addCaptureMiddleware();
-             * bot.addSendMiddleware();
-             */
-
-            // Add skills to the bot
-            const botController = bot.getController();
-
-            new SmartHomeSkill().hears(botController);
-
-            new VJSkill().hears(botController);
+        this._bots.forEach((botObject: BotFrameworkObject) => {
             
-            new FinalSkill().hears(botController);
+            const bot = botObject.bot;
+
+            // Add NLP recognizer
+            bot.recognizer(new DialogFlowRecognizer(Config.DIALOGFLOW_CONFIG));
+            
+            // Add skills to the bot
+            new MediaManagerSkill(bot);
+            const secretary = new SecretarySkill(bot);
+            secretary.routes(this._webserver.getExpressApp());
+            new SmallTalkSkill(bot);
+            new SmartHomeSkill(bot);
+            
+            new DefauktSkill(bot);
         });
     }
 }

@@ -1,28 +1,34 @@
-import { Message } from 'botkit';
-import { Intent, Entity } from '../index';
-
-export interface DialogFlowMessage extends Message {
-
+/**
+ * The interface for DialogFlow Configuration
+ */
+export interface DialogFlowConfiguration {
+    /**
+     * The DialogFlow Endpoint.
+     */
+    endpoint: string,
 
     /**
-     * The top intent of the message.
+     * DialowFlow API Key.
      */
-    topIntent: Intent,
+    accessToken: string,
 
     /**
-     * A list of possible intents.
+     * The Google Cloud Project ID.
      */
-    intents: Intent[],
-    
-    /**
-     * The entities that match the utterance.
-     */
-    entities: Entity[],
+    projectId: string
 
     /**
-     * Fulfillments from DialogFlow.
+     * An optional logger
      */
-    fulfillment: DialogFlowFulfillment
+    logger?: any
+}
+
+export interface QueryParameters {
+    v?: string,
+    lang?: string,
+    sessionId?: string,
+    query?: string,
+    timezone?: string,
 }
 
 export interface DialogFlowFulfillmentMessage {
@@ -60,24 +66,4 @@ export interface DialogFlowResponse {
      * The session ID of the request.
      */
     sessionId: string
-}
-
-/**
- * The interface for DialogFlow Configuration
- */
-export interface DialogFlowConfiguration {
-    /**
-     * The DialogFlow Endpoint.
-     */
-    endpoint: string,
-
-    /**
-     * DialowFlow API Key.
-     */
-    accessToken: string,
-
-    /**
-     * The Google Cloud Project ID.
-     */
-    projectId: string
 }
