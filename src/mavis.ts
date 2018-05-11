@@ -1,10 +1,13 @@
-import * as Botkit from 'botkit';
-import { Config } from './config';
-import { Bot, BotkitBot, BotFrameworkFactory } from './botcore';
-import { BotkitNLP } from './middleware/botkit-nlp';
-import { Server } from './server';
-import { FinalSkill, SmartHomeSkill, VJSkill } from './skills';
+import * as Botkit from "botkit";
+import { Config } from "./config";
+import { Bot, BotkitBot, BotFrameworkFactory } from "./botcore";
+import { BotkitNLP } from "./middleware/botkit-nlp";
+import { Server } from "./common/server";
+import { FinalSkill, SmartHomeSkill, VJSkill } from "./skills";
 
+/**
+ * This class is responsible for starting and initializing Mavis.
+ */
 export default class Mavis {
 
     public _bots: BotkitBot[] = [];
@@ -22,7 +25,7 @@ export default class Mavis {
         return {
             uptime: Date.now() - this._startTime.getTime(),
             // TODO(bajtos) move this code to Application, the URL should
-            // be accessible via this.get('http.url')
+            // be accessible via this.get("http.url")
             url: Config.APP_ENDPOINT
         };
     }
@@ -37,7 +40,7 @@ export default class Mavis {
             this._bots.forEach(bot => {
                 bot.createWebhookEndpoints(webserver);
             });
-            console.log('** MAVIS is online!');
+            console.log("** MAVIS is online!");
         });
     }
 
@@ -73,11 +76,11 @@ export default class Mavis {
             // Add skills to the bot
             const botController = bot.getController();
 
-            new SmartHomeSkill().hears(botController);
+            new SmartHomeSkill(botController);
 
-            new VJSkill().hears(botController);
+            new VJSkill(botController);
             
-            new FinalSkill().hears(botController);
+            new FinalSkill(botController);
         });
     }
 }

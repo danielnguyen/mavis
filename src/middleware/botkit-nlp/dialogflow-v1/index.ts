@@ -1,22 +1,22 @@
-import { Bot, Message } from 'botkit';
-import { Intent } from '../index';
-import { DialogFlowConfiguration, DialogFlowMessage, DialogFlowResult, DialogFlowResponse } from './index.d';
-import * as HTTP_STATUS from 'http-status-codes';
-import * as request from 'request-promise';
-import * as querystring from 'querystring';
+import { Bot, Message } from "botkit";
+import { Intent } from "../index";
+import { DialogFlowConfiguration, DialogFlowMessage, DialogFlowResult, DialogFlowResponse } from "./index.d";
+import * as HTTP_STATUS from "http-status-codes";
+import * as request from "request-promise";
+import * as querystring from "querystring";
 
 
 export class DialogFlow {
 
-    private static readonly LANGUAGE: string = 'en';
+    private static readonly LANGUAGE: string = "en";
 
-    private static readonly DIALOGFLOW_QUERY_API: string = '/v1/query';
+    private static readonly DIALOGFLOW_QUERY_API: string = "/v1/query";
 
     private _dialogFlowConfig: DialogFlowConfiguration;
 
     constructor(options: DialogFlowConfiguration) {
         if (!options || !options.endpoint || !options.projectId || !options.accessToken) {
-            console.error('Error: Please specify DialogFlow credentials. Got: ' + JSON.stringify(options));
+            console.error("Error: Please specify DialogFlow credentials. Got: " + JSON.stringify(options));
         } else {
             this._dialogFlowConfig = options;            
         }
@@ -25,21 +25,21 @@ export class DialogFlow {
     public async getDialogFlowResult(text: string) {
          // Construct the query params to pass to the LUIS API.
          const queryParams = {
-            v: '20150910', // DialogFlow API Version (Required)
+            v: "20150910", // DialogFlow API Version (Required)
             lang: DialogFlow.LANGUAGE,
-            sessionId: 'some-session-id',
+            sessionId: "some-session-id",
             query: text,
-            timezone: 'America/New_York'
+            timezone: "America/New_York"
         };
         
         // Construct the URL Endpoint to call the DialogFlow DetectIntent API.
         const url = this._dialogFlowConfig.endpoint + DialogFlow.DIALOGFLOW_QUERY_API
-            + '?' + querystring.stringify(queryParams);
+            + "?" + querystring.stringify(queryParams);
 
         // Configure any necessary properties.
         const requestOptions = {
             headers: {
-                Authorization: 'Bearer ' + this._dialogFlowConfig.accessToken,
+                Authorization: "Bearer " + this._dialogFlowConfig.accessToken,
             }
         };
 
@@ -51,9 +51,9 @@ export class DialogFlow {
                 return data.result;
             }
         }).catch((error) => {
-            console.error('DialogFlow Middleware Error: ', error);  
+            console.error("DialogFlow Middleware Error: ", error);  
         });
     }
 }
 
-export * from './index.d';
+export * from "./index.d";

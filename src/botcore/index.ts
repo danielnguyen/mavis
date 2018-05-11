@@ -1,5 +1,5 @@
-import { Controller } from 'botkit';
-import { Bot } from './index';
+import { Controller } from "botkit";
+import { Bot } from "./index";
 
 export abstract class BotFactory {
     abstract createBot(config?: any): Bot;
@@ -21,5 +21,5 @@ export abstract class BotkitFactory extends BotFactory {
     }
  }
 
- export * from './Bot';
- export * from './BotFrameworkFactory';
+ export * from "./Bot";
+ export * from "./BotFrameworkFactory";

@@ -1,5 +1,5 @@
-import { Message } from 'botkit';
-import { Intent, Entity } from '../index';
+import { Message } from "botkit";
+import { Intent, Entity } from "../index";
 
 export interface LuisResponse {
     /**

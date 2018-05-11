@@ -1,11 +1,11 @@
-import { Bot, Message } from 'botkit';
-import * as HTTP_STATUS from 'http-status-codes';
-import { NLPMessage, Intent } from './index.d';
-import { DialogFlow, DialogFlowResult } from './dialogflow-v1';
-import { LUIS } from './luis';
-import { Config } from '../../config';
-import * as request from 'request';
-import { Promise } from 'bluebird';
+import { Bot, Message } from "botkit";
+import * as HTTP_STATUS from "http-status-codes";
+import { NLPMessage, Intent } from "./index.d";
+import { DialogFlow, DialogFlowResult } from "./dialogflow-v1";
+import { LUIS } from "./luis";
+import { Config } from "../../config";
+import * as request from "request";
+import { Promise } from "bluebird";
 
 
 export class BotkitNLP {
@@ -36,7 +36,7 @@ export class BotkitNLP {
                         const luisData = JSON.parse(data);  
                         luisTopIntent = luisData.topScoringIntent;                    
                     }).catch((error) => {
-                        console.error('Botkit NLP Middleware Error: LUIS');
+                        console.error("Botkit NLP Middleware Error: LUIS");
                         luisTopIntent = { intent: "", score: -1 };        
                     });
                 }
@@ -50,7 +50,7 @@ export class BotkitNLP {
                         const dialogflowData = JSON.parse(data);
                         dialogflowResult = dialogflowData.result;
                     }).catch((error) => {
-                        console.error('Botkit NLP Middleware Error: DialogFlow');
+                        console.error("Botkit NLP Middleware Error: DialogFlow");
                     });
                 }
             }
@@ -61,8 +61,8 @@ export class BotkitNLP {
 
             await Promise.all([luisRequest(), dialogFlowRequest()].map(handleRejection))
             .then(() => {
-                console.log('Comparing intents...')
-                console.log('LUIS Intent Score: ' + luisTopIntent.score + ', DialogFlow Intent Score: ' + dialogflowResult.score);
+                console.log("Comparing intents...")
+                console.log("LUIS Intent Score: " + luisTopIntent.score + ", DialogFlow Intent Score: " + dialogflowResult.score);
                 // Build Intents based on which has a higher confidence
                 let intent: Intent = null
                 if (luisTopIntent.score > dialogflowResult.score) {
@@ -72,7 +72,7 @@ export class BotkitNLP {
                         data: luisTopIntent
                     };
                     message.topIntent = intent;
-                    console.log('Using LUIS Intent: '+JSON.stringify(intent));
+                    console.log("Using LUIS Intent: "+JSON.stringify(intent));
                 } else if (luisTopIntent.score < dialogflowResult.score) {
                     intent = {
                         intent: dialogflowResult.action,
@@ -82,7 +82,7 @@ export class BotkitNLP {
                     message.topIntent = intent;
                     // Add fulfillments as well:
                     message.fulfillment = dialogflowResult.fulfillment;
-                    console.log('Using DialogFlow Intent: '+JSON.stringify(intent));
+                    console.log("Using DialogFlow Intent: "+JSON.stringify(intent));
                 }
 
                 // Continue with next handler
@@ -103,14 +103,14 @@ export class BotkitNLP {
 
         let input: string = "";
 
-        // if intent doesn't exist, use message.text as input as it is
+        // if intent doesn"t exist, use message.text as input as it is
         // possible that LUIS NLP is disabled.
         if (message.topIntent && message.topIntent.intent) {
             input = message.topIntent.intent.trim()
-            console.debug('Intent present. Using intent ' + input + 'as input.');
+            console.debug("Intent present. Using intent " + input + "as input.");
         } else {
             input = message.text;
-            console.debug('Intent not present. Using message text ' + input + ' as input.');
+            console.debug("Intent not present. Using message text " + input + " as input.");
         }
 
         let tests;
@@ -122,18 +122,18 @@ export class BotkitNLP {
         for (let i = 0; i < tests.length; i++) {
             let test = null;
             try {
-                test = new RegExp(tests[i], 'i');
+                test = new RegExp(tests[i], "i");
             } catch (err) {
-                console.error('Error in regular expression: ' + tests[i] + ': ' + err);
+                console.error("Error in regular expression: " + tests[i] + ": " + err);
                 return false;
             }
             if (!test) {
                 return false;
             }
 
-            console.debug('Current test is ' + test);
+            console.debug("Current test is " + test);
             if (input !== "" && input.match(test)) {
-                console.debug('Match for input found: ' + test);
+                console.debug("Match for input found: " + test);
                 return true;
             }
         }
@@ -141,4 +141,4 @@ export class BotkitNLP {
     }
 }
 
-export * from './index.d';
+export * from "./index.d";

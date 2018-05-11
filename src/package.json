@@ -8,44 +8,48 @@
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "start": "./node_modules/.bin/ts-node ./app.ts",
+    "start": "ts-node ./app.ts",
     "start:watch": "nodemon --exec ts-node -- ./app.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielnguyen/mavis.git"
+    "url": "git+https://github.com/danielnguyen/mavis-bot.git"
   },
   "author": "Daniel Nguyen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danielnguyen/mavis/issues"
+    "url": "https://github.com/danielnguyen/mavis-bot/issues"
   },
-  "homepage": "https://github.com/danielnguyen/mavis#readme",
-  "devDependencies": {},
+  "homepage": "https://github.com/danielnguyen/mavis-bot#readme",
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  },
   "engineStrict": true,
   "engines": {
     "node": ">= 8.8.1"
   },
   "dependencies": {
-    "@types/dotenv": "^4.0.2",
-    "@types/express": "^4.0.39",
+    "@types/dotenv": "^4.0.3",
+    "@types/express": "^4.11.1",
+    "@types/lodash": "^4.14.108",
     "@types/morgan": "^1.7.35",
-    "@types/node": "^8.0.57",
-    "@types/request": "^2.0.8",
-    "@types/request-promise": "^4.1.39",
+    "@types/node": "^8.10.13",
+    "@types/request": "^2.47.0",
+    "@types/request-promise": "^4.1.41",
     "body-parser": "^1.18.2",
-    "botkit": "^0.6.7",
+    "botkit": "^0.6.14",
     "dialogflow": "^0.1.0",
     "dotenv": "^4.0.0",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "fs": "0.0.1-security",
     "http-status-codes": "^1.3.0",
+    "lodash": "^4.17.10",
     "morgan": "^1.9.0",
     "path": "^0.12.7",
     "querystring": "^0.2.0",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "request-promise": "^4.2.2",
     "ts-node": "^3.3.0",
-    "typescript": "^2.6.2"
+    "typescript": "^2.8.3"
   }
 }

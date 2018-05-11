@@ -8,47 +8,45 @@
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "start": "ts-node ./src/app.ts",
-    "start:watch": "nodemon --exec ts-node -- ./src/app.ts",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielnguyen/mavis.git"
+    "url": "git+https://github.com/danielnguyen/mavis-bot.git"
   },
   "author": "Daniel Nguyen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danielnguyen/mavis/issues"
+    "url": "https://github.com/danielnguyen/mavis-bot/issues"
   },
-  "homepage": "https://github.com/danielnguyen/mavis#readme",
+  "homepage": "https://github.com/danielnguyen/mavis-bot#readme",
   "devDependencies": {
-    "@types/node": "^8.0.57",
+    "@types/node": "^8.10.13",
     "jest": "^21.2.1",
-    "nodemon": "^1.12.1",
+    "nodemon": "^1.17.4",
     "rimraf": "^2.6.2",
     "ts-node": "^3.3.0",
-    "tslint": "^5.8.0",
-    "tslint-microsoft-contrib": "^5.0.1",
-    "typescript": "^2.6.2"
+    "tslint": "^5.10.0",
+    "tslint-microsoft-contrib": "^5.0.3",
+    "typescript": "^2.8.3"
   },
   "engineStrict": true,
   "engines": {
     "node": ">= 8.9.x"
   },
   "dependencies": {
-    "@types/alexa-sdk": "^1.1.0",
-    "@types/dotenv": "^4.0.2",
-    "@types/express": "^4.0.39",
+    "@types/alexa-sdk": "^1.1.1",
+    "@types/dotenv": "^4.0.3",
+    "@types/express": "^4.11.1",
     "@types/morgan": "^1.7.35",
-    "alexa-sdk": "^1.0.21",
-    "alexa-verifier-middleware": "^1.0.0",
+    "alexa-sdk": "^1.0.25",
+    "alexa-verifier-middleware": "^1.0.1",
     "body-parser": "^1.18.2",
-    "botkit": "^0.6.7",
+    "botkit": "^0.6.14",
     "dotenv": "^4.0.0",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "fs": "0.0.1-security",
     "morgan": "^1.9.0",
     "path": "^0.12.7"

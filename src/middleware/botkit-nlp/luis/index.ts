@@ -1,18 +1,18 @@
-import { Bot, Message } from 'botkit';
-import * as HTTP_STATUS from 'http-status-codes';
-import { MicrosoftLuisConfiguration, LuisResponse } from './index.d';
-import * as querystring from 'querystring';
-import * as request from 'request-promise';
+import { Bot, Message } from "botkit";
+import * as HTTP_STATUS from "http-status-codes";
+import { MicrosoftLuisConfiguration, LuisResponse } from "./index.d";
+import * as querystring from "querystring";
+import * as request from "request-promise";
 
 export class LUIS {
 
-    private static readonly LUIS_QUERY_API = '/luis/v2.0/apps/';
+    private static readonly LUIS_QUERY_API = "/luis/v2.0/apps/";
 
     private _luisConfig: MicrosoftLuisConfiguration;
 
     constructor(options: MicrosoftLuisConfiguration) {
         if (!options || !options.endpoint || !options.appId || !options.apiKey) {
-            console.error('Error: Please specify LUIS credentials. Got: ' + JSON.stringify(options));
+            console.error("Error: Please specify LUIS credentials. Got: " + JSON.stringify(options));
         } else {
             this._luisConfig = options;            
         }
@@ -29,15 +29,15 @@ export class LUIS {
             
         // Construct the query params to pass to the LUIS API.
         const queryParams = {
-            'subscription-key': this._luisConfig.apiKey,
-            'verbose': this._luisConfig.verbose,
-            'timezoneOffset': '-300',
-            'q': text // The utterance quiery
+            "subscription-key": this._luisConfig.apiKey,
+            "verbose": this._luisConfig.verbose,
+            "timezoneOffset": "-300",
+            "q": text // The utterance quiery
         };
         
         // Construct the URL Endpoint to call with the params.
         const url = this._luisConfig.endpoint + LUIS.LUIS_QUERY_API + this._luisConfig.appId 
-                + '?' + querystring.stringify(queryParams);
+                + "?" + querystring.stringify(queryParams);
         
         // Perform the API call.
         return await request.get(url, (err, res, body) => {
@@ -48,9 +48,9 @@ export class LUIS {
                 return data.topScoringIntent;
             }
         }).catch((error) => {
-            console.error('LUIS Middleware Error: ', error);            
+            console.error("LUIS Middleware Error: ", error);            
         });
     }
 }
 
-export * from './index.d';
+export * from "./index.d";

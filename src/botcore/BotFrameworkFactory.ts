@@ -1,7 +1,7 @@
-import * as BotKit from 'botkit';
-import { BotkitFactory, BotFrameworkBot } from './index';
-import { BotFrameworkConfiguration, BotFrameworkController, BotFrameworkSpawnConfiguration } from 'botkit';
-import { Config } from '../config';
+import * as BotKit from "botkit";
+import { BotkitFactory, BotFrameworkBot } from "./index";
+import { BotFrameworkConfiguration, BotFrameworkController, BotFrameworkSpawnConfiguration } from "botkit";
+import { Config } from "../config";
 
 export class BotFrameworkFactory extends BotkitFactory {
 
@@ -14,7 +14,7 @@ export class BotFrameworkFactory extends BotkitFactory {
     
     public createBot(config: BotFrameworkSpawnConfiguration): BotFrameworkBot {
         if ((!this._config || !this._config.debug) && (!config || !config.appId || !config.appPassword)) {
-            console.error('Error: Specify Microsoft App Credentials in environment');
+            console.error("Error: Specify Microsoft App Credentials in environment");
         }
         
         return new BotFrameworkBot(this.spawn(config), this._controller);

@@ -1,4 +1,4 @@
-import { Message } from 'botkit';
+import { Message } from "botkit";
 
 export interface Intent {
     

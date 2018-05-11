@@ -1,10 +1,10 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
-import * as morgan from 'morgan';
-import { Config } from './config';
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as fs from "fs";
+import * as http from "http";
+import * as https from "https";
+import * as morgan from "morgan";
+import { Config } from "../config";
 
 export interface ServerOptions {
     hostname?: string;
@@ -36,13 +36,13 @@ export class Server {
             extended: true
         }));
 
-        this._server.set('port', this._config.port);  
-        this._server.set('host', this._config.hostname);
+        this._server.set("port", this._config.port);  
+        this._server.set("host", this._config.hostname);
 
-        this._server.use(morgan('dev'));  // log every request to the console 
+        this._server.use(morgan("dev"));  // log every request to the console 
 
-        this._server.get('/api/v1/healthcheck', (req, res) => {
-            res.send('{status: 200, message: "All good!"}');
+        this._server.get("/api/v1/healthcheck", (req, res) => {
+            res.send("{status: 200, message: 'All good!'}");
         });
     }
     
@@ -51,13 +51,13 @@ export class Server {
     }
 
     public async info() {
-        const protocol: string = this._config.secure ? 'https' : 'http';
-        const endpoint: string = protocol + '://' + this._config.hostname + ':' + this._config.port;
+        const protocol: string = this._config.secure ? "https" : "http";
+        const endpoint: string = protocol + "://" + this._config.hostname + ":" + this._config.port;
 
         return {
             uptime: Date.now() - this._startTime.getTime(),
             // TODO(bajtos) move this code to Application, the URL should
-            // be accessible via this.get('http.url')
+            // be accessible via this.get("http.url")
             url: endpoint
         };
     }
@@ -68,17 +68,17 @@ export class Server {
         if (this._config.secure) {
             // Start Server in https
             const options = {
-                cert: fs.readFileSync(require('path').join(__dirname, './certs/server.crt')),
-                key: fs.readFileSync(require('path').join(__dirname, './certs/key.pem'))
+                cert: fs.readFileSync(require("path").join(__dirname, "./certs/server.crt")),
+                key: fs.readFileSync(require("path").join(__dirname, "./certs/key.pem"))
             };
-            https.createServer(options, this._server).listen(this._server.get('port'), this._server.get('host'), () => {
+            https.createServer(options, this._server).listen(this._server.get("port"), this._server.get("host"), () => {
                 if (cb) cb(this._server);
             });
         } else {
             // Start Server in http
             this._server.listen(
-                this._server.get('port'),
-                this._server.get('host'),
+                this._server.get("port"),
+                this._server.get("host"),
                 () => {
                     if (cb) cb(this._server);
                 }

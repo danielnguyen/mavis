@@ -1,29 +1,13 @@
-import * as dotenv from 'dotenv';
-import * as path from 'path';
-import * as fs from 'fs';
+import { Environment } from "./common/env";
 
-// Need to load env before importing anything else.
-const dotenvFile = process.env.DOTENV || path.join(__dirname, '.env');
-if (fs.existsSync(dotenvFile)) {
-    loadEnv(dotenvFile).catch(err => {
-        console.error('Cannot load environment settings.', err);
-        process.exit(1);
-    });
-}
+Environment.loadEnv();
 
-// Need to come after load env.
 import Mavis from './mavis';
 
 main().catch(err => {
     console.error('Cannot start Mavis.', err);
     process.exit(1);
 });
-  
-async function loadEnv(dotenvFile: string): Promise<void> {
-    const dotenvConfig = await dotenv.config({path: dotenvFile});
-    if (dotenvConfig.error) console.error('Error: ', dotenvConfig.error);
-    if (process.env.NODE_ENV !== 'production') console.log(dotenvConfig);
-}
 
 async function main(): Promise<void> {    
     const app = new Mavis();
